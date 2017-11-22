@@ -25,7 +25,7 @@ type DeviceBoilerAInfo struct {
 	Throttle_Feedback    string  `json:"throttle_feedback"`
 	Big_Fire             string  `json:"big_fire"`
 	Small_Fire           string  `json:"small_fire"`
-	Water_Pum            string  `json:"water_pum"`
+	Water_Pump            string  `json:"water_pump"`
 }
 
 func NewDeviceBoilerAInfo(f *DeviceBoilerAInfoPostForm, t time.Time) *DeviceBoilerAInfo {
@@ -44,7 +44,7 @@ func NewDeviceBoilerAInfo(f *DeviceBoilerAInfoPostForm, t time.Time) *DeviceBoil
 		Throttle_Feedback:     f.Throttle_Feedback,
 		Big_Fire:     f.Big_Fire,
 		Small_Fire:     f.Small_Fire,
-		Water_Pum:    f.Water_Pum,}
+		Water_Pump:    f.Water_Pump,}
 
 	return &DeviceBoilerAinfo
 }
@@ -52,14 +52,14 @@ func NewDeviceBoilerAInfo(f *DeviceBoilerAInfoPostForm, t time.Time) *DeviceBoil
 func (r *DeviceBoilerAInfo) Insert() (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("INSERT INTO dev_boiler_a_info(device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	st, err := db.Prepare("INSERT INTO dev_boiler_a_info(device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pump) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return ErrDatabase, err
 	}
 	defer st.Close()
 
 	//if result, err := st.Exec(
-	if _, err := st.Exec(r.Device_sn, r.Start, r.Turn_Fire, r.Stop, r.Gas_Open, r.Gas_Feedback, r.Smoke_Loop, r.Steam_Pressure, r.Fan_Freq, r.Freq_Feedback, r.Throttle_Open, r.Throttle_Feedback, r.Big_Fire, r.Small_Fire, r.Water_Pum); err != nil {
+	if _, err := st.Exec(r.Device_sn, r.Start, r.Turn_Fire, r.Stop, r.Gas_Open, r.Gas_Feedback, r.Smoke_Loop, r.Steam_Pressure, r.Fan_Freq, r.Freq_Feedback, r.Throttle_Open, r.Throttle_Feedback, r.Big_Fire, r.Small_Fire, r.Water_Pump); err != nil {
 		if e, ok := err.(*mysql.MySQLError); ok {
 			//Duplicate key
 			if e.Number == 1062 {
@@ -80,7 +80,7 @@ func (r *DeviceBoilerAInfo) Insert() (code int, err error) {
 func (r *DeviceBoilerAInfo) FindById(id int64) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum FROM dev_boiler_a_info WHERE id = ?")
+	st, err := db.Prepare("SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pump FROM dev_boiler_a_info WHERE id = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -103,10 +103,10 @@ func (r *DeviceBoilerAInfo) FindById(id int64) (code int, err error) {
 	var tmpThrottle_Feedback    sql.NullString
     var tmpBig_Fire     sql.NullString  
     var tmpSmall_Fire   sql.NullString 
-	var tmpWater_Pum    sql.NullString 
+	var tmpWater_Pump    sql.NullString 
 
 
-	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart, &tmpTurn_Fire, &tmpStop, &tmpGas_Open, &tmpGas_Feedback,  &tmpSmoke_Loop, &tmpSteam_Pressure, &tmpFan_Freq, &tmpFreq_Feedback, &tmpThrottle_Open, &tmpThrottle_Feedback,  &tmpBig_Fire, &tmpSmall_Fire, &tmpWater_Pum); err != nil {
+	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart, &tmpTurn_Fire, &tmpStop, &tmpGas_Open, &tmpGas_Feedback,  &tmpSmoke_Loop, &tmpSteam_Pressure, &tmpFan_Freq, &tmpFreq_Feedback, &tmpThrottle_Open, &tmpThrottle_Feedback,  &tmpBig_Fire, &tmpSmall_Fire, &tmpWater_Pump); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
 		} else {
@@ -159,8 +159,8 @@ func (r *DeviceBoilerAInfo) FindById(id int64) (code int, err error) {
 		if tmpSmall_Fire.Valid {
 			r.Small_Fire = tmpSmall_Fire.String
 		}
-		if tmpWater_Pum.Valid {
-			r.Water_Pum = tmpWater_Pum.String
+		if tmpWater_Pump.Valid {
+			r.Water_Pump = tmpWater_Pump.String
 		}
 
 	return 0, nil
@@ -169,7 +169,7 @@ func (r *DeviceBoilerAInfo) FindById(id int64) (code int, err error) {
 func (r *DeviceBoilerAInfo) FindByDeviceSN(device_sn string) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum FROM dev_boiler_a_info WHERE device_sn = ?")
+	st, err := db.Prepare("SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pump FROM dev_boiler_a_info WHERE device_sn = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -192,10 +192,10 @@ func (r *DeviceBoilerAInfo) FindByDeviceSN(device_sn string) (code int, err erro
 	var tmpThrottle_Feedback    sql.NullString
     var tmpBig_Fire     sql.NullString  
     var tmpSmall_Fire   sql.NullString 
-	var tmpWater_Pum    sql.NullString 
+	var tmpWater_Pump    sql.NullString 
 
 
-	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart, &tmpTurn_Fire, &tmpStop, &tmpGas_Open, &tmpGas_Feedback,  &tmpSmoke_Loop, &tmpSteam_Pressure, &tmpFan_Freq, &tmpFreq_Feedback, &tmpThrottle_Open, &tmpThrottle_Feedback,  &tmpBig_Fire, &tmpSmall_Fire, &tmpWater_Pum); err != nil {
+	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart, &tmpTurn_Fire, &tmpStop, &tmpGas_Open, &tmpGas_Feedback,  &tmpSmoke_Loop, &tmpSteam_Pressure, &tmpFan_Freq, &tmpFreq_Feedback, &tmpThrottle_Open, &tmpThrottle_Feedback,  &tmpBig_Fire, &tmpSmall_Fire, &tmpWater_Pump); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
 		} else {
@@ -248,8 +248,8 @@ func (r *DeviceBoilerAInfo) FindByDeviceSN(device_sn string) (code int, err erro
 		if tmpSmall_Fire.Valid {
 			r.Small_Fire = tmpSmall_Fire.String
 		}
-		if tmpWater_Pum.Valid {
-			r.Water_Pum = tmpWater_Pum.String
+		if tmpWater_Pump.Valid {
+			r.Water_Pump = tmpWater_Pump.String
 		}
 
 	return 0, nil
@@ -262,7 +262,7 @@ func (r *DeviceBoilerAInfo) ClearPass() {
 func GetAllDeviceBoilerAInfos(queryVal map[string]string, queryOp map[string]string,
 	order map[string]string, limit int64,
 	offset int64) (records []DeviceBoilerAInfo, err error) {
-	sqlStr := "SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum FROM dev_boiler_a_info"
+	sqlStr := "SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pump FROM dev_boiler_a_info"
 	if len(queryVal) > 0 {
 		sqlStr += " WHERE "
 		first := true
@@ -334,9 +334,9 @@ func GetAllDeviceBoilerAInfos(queryVal map[string]string, queryOp map[string]str
 		var tmpThrottle_Feedback    sql.NullString
 		var tmpBig_Fire     sql.NullString  
 		var tmpSmall_Fire   sql.NullString 
-		var tmpWater_Pum    sql.NullString
+		var tmpWater_Pump    sql.NullString
 		
-		if err := rows.Scan(&tmpId, &tmpDevice_sn, &tmpStart, &tmpTurn_Fire, &tmpStop, &tmpGas_Open, &tmpGas_Feedback,  &tmpSmoke_Loop, &tmpSteam_Pressure, &tmpFan_Freq, &tmpFreq_Feedback, &tmpThrottle_Open, &tmpThrottle_Feedback,  &tmpBig_Fire, &tmpSmall_Fire, &tmpWater_Pum); err != nil {
+		if err := rows.Scan(&tmpId, &tmpDevice_sn, &tmpStart, &tmpTurn_Fire, &tmpStop, &tmpGas_Open, &tmpGas_Feedback,  &tmpSmoke_Loop, &tmpSteam_Pressure, &tmpFan_Freq, &tmpFreq_Feedback, &tmpThrottle_Open, &tmpThrottle_Feedback,  &tmpBig_Fire, &tmpSmall_Fire, &tmpWater_Pump); err != nil {
 			return nil, err
 		}
 
@@ -386,8 +386,8 @@ func GetAllDeviceBoilerAInfos(queryVal map[string]string, queryOp map[string]str
 		if tmpSmall_Fire.Valid {
 			r.Small_Fire = tmpSmall_Fire.String
 		}
-		if tmpWater_Pum.Valid {
-			r.Water_Pum = tmpWater_Pum.String
+		if tmpWater_Pump.Valid {
+			r.Water_Pump = tmpWater_Pump.String
 		}
 		
 		records = append(records, r)
@@ -581,14 +581,14 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 		}
 	}
 
-	if len(f.Water_Pum) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET water_pum = ? WHERE id = ?")
+	if len(f.Water_Pump) > 0 {
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET water_pump = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Water_Pum, id)
+		_, err2 := st.Exec(f.Water_Pump, id)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
@@ -769,14 +769,14 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 		}
 	}
 
-	if len(f.Water_Pum) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET water_pum = ? WHERE device_sn = ?")
+	if len(f.Water_Pump) > 0 {
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET water_pump = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Water_Pum, device_sn)
+		_, err2 := st.Exec(f.Water_Pump, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
