@@ -192,12 +192,6 @@ func (this *DeviceController) Delete() {
 	}*/
 
 	device := models.Device{}
-
-	deviceAttrInfo := models.DeviceAttrInfo{}
-	if _, err := deviceAttrInfo.DeleteByDeviceSN(idStr); err != nil {
-		beego.Error("DeleteDeviceAttrInfoById:", err)
-
-	}
 	
 	if code, err := device.DeleteByDeviceSN(idStr); err != nil {
 		beego.Error("DeleteDeviceById:", err)

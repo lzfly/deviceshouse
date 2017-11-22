@@ -141,7 +141,7 @@ func (this *DeviceBoilerBInfoController) Put() {
 	
 	form := models.DeviceBoilerBInfoPutForm{}
 
-	err = json.Unmarshal(this.Ctx.Input.RequestBody, &form)
+	err := json.Unmarshal(this.Ctx.Input.RequestBody, &form)
 	if err != nil {
 		beego.Debug("ParseDeviceBoilerBInfoPut:", err)
 		this.RetError(errInputData)
