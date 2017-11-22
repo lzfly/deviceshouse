@@ -4,7 +4,6 @@ type DevicePostForm struct {
 	Device_sn      string `json:"device_sn"`
 	Type_code      int32  `json:"type_code"`
 	Type_name      string `json:"type_name"`
-	Device_model   string `json:"device_model"`
 	Device_name           string `json:"device_name"`
 }
 
@@ -29,7 +28,6 @@ type DeviceGetAllInfo struct {
 type DevicePutForm struct {
 	Type_code      int32  `json:"type_code"`
 	Type_name      string `json:"type_name"`
-	Device_model   string `json:"device_model"`
 	Device_name           string `json:"device_name"`
 }
 
