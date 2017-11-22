@@ -4,38 +4,36 @@ import (
 	"boilerserver/models"
 	"encoding/json"
 	"github.com/astaxie/beego"
-	"strconv"
 	"time"
-	"strings"
 )
 
-type DeviceBoilerBController struct {
+type DeviceBoilerBInfoController struct {
 	BaseController
 }
 
-func (this *DeviceBoilerBController) Post() {
-	form := models.DeviceBoilerBPostForm{}
+func (this *DeviceBoilerBInfoController) Post() {
+	form := models.DeviceBoilerBInfoPostForm{}
 	err := json.Unmarshal(this.Ctx.Input.RequestBody, &form)
 	if err != nil {
-		beego.Debug("ParseDeviceBoilerBPost:", err)
+		beego.Debug("ParseDeviceBoilerBInfoPost:", err)
 		this.RetError(errInputData)
 		return
 	}
-	beego.Debug("ParseDeviceBoilerBPost:", &form)
+	beego.Debug("ParseDeviceBoilerBInfoPost:", &form)
 
 	regDate := time.Now()
 	
-    DeviceBoilerB1 := models.NewDeviceBoilerB(&form, regDate)
-	if _, err1 := DeviceBoilerB1.FindByDeviceSN(form.Device_sn); err1 == nil{
+    DeviceBoilerBInfo1 := models.NewDeviceBoilerBInfo(&form, regDate)
+	if _, err1 := DeviceBoilerBInfo1.FindByDeviceSN(form.Device_sn); err1 == nil{
         this.RetError(errDupUser)
 		return
 	}
 	
-	DeviceBoilerB := models.NewDeviceBoilerB(&form, regDate)
-	beego.Debug("NewDeviceBoilerB:", DeviceBoilerB)
+	DeviceBoilerBInfo := models.NewDeviceBoilerBInfo(&form, regDate)
+	beego.Debug("NewDeviceBoilerBInfo:", DeviceBoilerBInfo)
 
-	if code, err := DeviceBoilerB.Insert(); err != nil {
-		beego.Error("InsertDeviceBoilerB:", err)
+	if code, err := DeviceBoilerBInfo.Insert(); err != nil {
+		beego.Error("InsertDeviceBoilerBInfo:", err)
 		if code == models.ErrDupRows {
 			this.RetError(errDupUser)
 		} else {
@@ -44,24 +42,24 @@ func (this *DeviceBoilerBController) Post() {
 		return
 	}
 
-	DeviceBoilerB.ClearPass()
+	DeviceBoilerBInfo.ClearPass()
 
-	this.Data["json"] = &models.DeviceBoilerBPostInfo{Status:0, Code:0, DeviceBoilerBInfo: DeviceBoilerB}
+	this.Data["json"] = &models.DeviceBoilerBInfoPostInfo{Status:0, Code:0, DeviceBoilerBInfoInfo: DeviceBoilerBInfo}
 	this.ServeJSON()
 }
 
-func (this *DeviceBoilerBController) GetOne() {
+func (this *DeviceBoilerBInfoController) GetOne() {
 	idStr := this.Ctx.Input.Param(":id")
 	/*id, err := strconv.ParseInt(idStr, 10, 32)
 	if err != nil {
-		beego.Debug("ParseDeviceBoilerBId:", err)
+		beego.Debug("ParseDeviceBoilerBInfoId:", err)
 		this.RetError(errInputData)
 		return
 	}*/
 	
-	DeviceBoilerB := models.DeviceBoilerB{}
-	if code, err := DeviceBoilerB.FindByDeviceSN(idStr); err != nil {
-		beego.Error("FindDeviceBoilerBById:", err)
+	DeviceBoilerBInfo := models.DeviceBoilerBInfo{}
+	if code, err := DeviceBoilerBInfo.FindByDeviceSN(idStr); err != nil {
+		beego.Error("FindDeviceBoilerBInfoById:", err)
 		if code == models.ErrNotFound {
 			this.RetError(errNoUser)
 		} else {
@@ -69,15 +67,15 @@ func (this *DeviceBoilerBController) GetOne() {
 		}
 		return
 	}
-	beego.Debug("DeviceBoilerBInfo:", &DeviceBoilerB)
+	beego.Debug("DeviceBoilerBInfoInfo:", &DeviceBoilerBInfo)
 
-	DeviceBoilerB.ClearPass()
+	DeviceBoilerBInfo.ClearPass()
 
-	this.Data["json"] = &models.DeviceBoilerBGetOneInfo{Status:0, Code:0, DeviceBoilerBInfo: &DeviceBoilerB}
+	this.Data["json"] = &models.DeviceBoilerBInfoGetOneInfo{Status:0, Code:0, DeviceBoilerBInfoInfo: &DeviceBoilerBInfo}
 	this.ServeJSON()
 }
 
-func (this *DeviceBoilerBController) GetAll() {
+func (this *DeviceBoilerBInfoController) GetAll() {
 	queryVal, queryOp, err := this.ParseQueryParm()
 	if err != nil {
 		beego.Debug("ParseQuery:", err)
@@ -115,45 +113,45 @@ func (this *DeviceBoilerBController) GetAll() {
 	*/
 	beego.Debug("Offset:", offset)
 
-	DeviceBoilerBs, err := models.GetAllDeviceBoilerBs(queryVal, queryOp, order,
+	DeviceBoilerBInfos, err := models.GetAllDeviceBoilerBInfos(queryVal, queryOp, order,
 		limit, offset)
 	if err != nil {
-		beego.Error("GetAllDeviceBoilerB:", err)
+		beego.Error("GetAllDeviceBoilerBInfo:", err)
 		this.RetError(errDatabase)
 		return
 	}
-	beego.Debug("GetAllDeviceBoilerB:", &DeviceBoilerBs)
+	beego.Debug("GetAllDeviceBoilerBInfo:", &DeviceBoilerBInfos)
 
-	for i, _ := range DeviceBoilerBs {
-		DeviceBoilerBs[i].ClearPass()
+	for i, _ := range DeviceBoilerBInfos {
+		DeviceBoilerBInfos[i].ClearPass()
 	}
 
-	this.Data["json"] = &models.DeviceBoilerBGetAllInfo{Status:0, Code:0, DeviceBoilerBsInfo: DeviceBoilerBs}
+	this.Data["json"] = &models.DeviceBoilerBInfoGetAllInfo{Status:0, Code:0, DeviceBoilerBInfosInfo: DeviceBoilerBInfos}
 	this.ServeJSON()
 }
 
-func (this *DeviceBoilerBController) Put() {
+func (this *DeviceBoilerBInfoController) Put() {
 	idStr := this.Ctx.Input.Param(":id")
 	/*id, err := strconv.ParseInt(idStr, 0, 32)
 	if err != nil {
-		beego.Debug("ParseDeviceBoilerBId:", err)
+		beego.Debug("ParseDeviceBoilerBInfoId:", err)
 		this.RetError(errInputData)
 		return
 	}*/
 	
-	form := models.DeviceBoilerBPutForm{}
+	form := models.DeviceBoilerBInfoPutForm{}
 
 	err = json.Unmarshal(this.Ctx.Input.RequestBody, &form)
 	if err != nil {
-		beego.Debug("ParseDeviceBoilerBPut:", err)
+		beego.Debug("ParseDeviceBoilerBInfoPut:", err)
 		this.RetError(errInputData)
 		return
 	}
-	beego.Debug("ParseDeviceBoilerBPut:", &form)
+	beego.Debug("ParseDeviceBoilerBInfoPut:", &form)
 
-	DeviceBoilerB := models.DeviceBoilerB{}
-	if code, err := DeviceBoilerB.UpdateByDeviceSN(idStr, &form); err != nil {
-		beego.Error("UpdateDeviceBoilerBById:", err)
+	DeviceBoilerBInfo := models.DeviceBoilerBInfo{}
+	if code, err := DeviceBoilerBInfo.UpdateByDeviceSN(idStr, &form); err != nil {
+		beego.Error("UpdateDeviceBoilerBInfoById:", err)
 		this.RetError(errDatabase)
 		return
 	} else if code == models.ErrNotFound {
@@ -161,8 +159,8 @@ func (this *DeviceBoilerBController) Put() {
 		return
 	}
 
-	if code, err := DeviceBoilerB.FindByDeviceSN(idStr); err != nil {
-		beego.Error("FindDeviceBoilerBById:", err)
+	if code, err := DeviceBoilerBInfo.FindByDeviceSN(idStr); err != nil {
+		beego.Error("FindDeviceBoilerBInfoById:", err)
 		if code == models.ErrNotFound {
 			this.RetError(errNoUser)
 		} else {
@@ -170,33 +168,33 @@ func (this *DeviceBoilerBController) Put() {
 		}
 		return
 	}
-	beego.Debug("NewDeviceBoilerBInfo:", &DeviceBoilerB)
+	beego.Debug("NewDeviceBoilerBInfoInfo:", &DeviceBoilerBInfo)
 
-	DeviceBoilerB.ClearPass()
+	DeviceBoilerBInfo.ClearPass()
 
-	this.Data["json"] = &models.DeviceBoilerBPutInfo{Status:0, Code:0, DeviceBoilerBInfo: &DeviceBoilerB}
+	this.Data["json"] = &models.DeviceBoilerBInfoPutInfo{Status:0, Code:0, DeviceBoilerBInfoInfo: &DeviceBoilerBInfo}
 	this.ServeJSON()
 }
 
-func (this *DeviceBoilerBController) Delete() {
+func (this *DeviceBoilerBInfoController) Delete() {
 	idStr := this.Ctx.Input.Param(":id")
 	/*id, err := strconv.ParseInt(idStr, 0, 32)
 	if err != nil {
-		beego.Debug("ParseDeviceBoilerBId:", err)
+		beego.Debug("ParseDeviceBoilerBInfoId:", err)
 		this.RetError(errInputData)
 		return
 	}*/
 
 	
-	DeviceBoilerB := models.DeviceBoilerB{}
-	if code, err := DeviceBoilerB.DeleteByDeviceSN(idStr); err != nil {
-		beego.Error("DeleteDeviceBoilerBById:", err)
+	DeviceBoilerBInfo := models.DeviceBoilerBInfo{}
+	if code, err := DeviceBoilerBInfo.DeleteByDeviceSN(idStr); err != nil {
+		beego.Error("DeleteDeviceBoilerBInfoById:", err)
 		this.RetError(errDatabase)
 		return
 	} else if code == models.ErrNotFound {
 		this.RetError(errNoUser)
 		return
 	}
-	this.Data["json"] = &models.DeviceBoilerBDeleteInfo{Status:0, Code:0}
+	this.Data["json"] = &models.DeviceBoilerBInfoDeleteInfo{Status:0, Code:0}
 	this.ServeJSON()
 }
