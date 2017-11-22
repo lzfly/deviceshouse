@@ -52,7 +52,7 @@ func NewDeviceBoilerAInfo(f *DeviceBoilerAInfoPostForm, t time.Time) *DeviceBoil
 func (r *DeviceBoilerAInfo) Insert() (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("INSERT INTO dev_DeviceBoilerAinfo(device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	st, err := db.Prepare("INSERT INTO dev_boiler_a_info(device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -80,7 +80,7 @@ func (r *DeviceBoilerAInfo) Insert() (code int, err error) {
 func (r *DeviceBoilerAInfo) FindById(id int64) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum FROM dev_DeviceBoilerAinfo WHERE id = ?")
+	st, err := db.Prepare("SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum FROM dev_boiler_a_info WHERE id = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -169,7 +169,7 @@ func (r *DeviceBoilerAInfo) FindById(id int64) (code int, err error) {
 func (r *DeviceBoilerAInfo) FindByDeviceSN(device_sn string) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum FROM dev_DeviceBoilerAinfo WHERE device_sn = ?")
+	st, err := db.Prepare("SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum FROM dev_boiler_a_info WHERE device_sn = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -262,7 +262,7 @@ func (r *DeviceBoilerAInfo) ClearPass() {
 func GetAllDeviceBoilerAInfos(queryVal map[string]string, queryOp map[string]string,
 	order map[string]string, limit int64,
 	offset int64) (records []DeviceBoilerAInfo, err error) {
-	sqlStr := "SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum FROM dev_DeviceBoilerAinfo"
+	sqlStr := "SELECT id, device_sn, start, turn_fire, stop, gas_open, gas_feedback, smoke_loop, steam_pressure, fan_freq, freq_feedback, throttle_open, throttle_feedback, big_fire, small_fire, water_pum FROM dev_boiler_a_info"
 	if len(queryVal) > 0 {
 		sqlStr += " WHERE "
 		first := true
@@ -403,7 +403,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	db := mymysql.Conn()
 	
 	if len(f.Device_sn) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET device_sn = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET device_sn = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -416,7 +416,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	}
 
 	if len(f.Start) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET start = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET start = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -428,7 +428,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 		}
 	}
 	if len(f.Turn_Fire) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET turn_fire = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET turn_fire = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -440,7 +440,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 		}
 	}
 	if len(f.Stop) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET stop = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET stop = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -453,7 +453,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	}
 
 	if len(f.Gas_Open) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET gas_open = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET gas_open = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -466,7 +466,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	}
 
 	if len(f.Gas_Feedback) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET gas_feedback = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET gas_feedback = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -480,7 +480,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 
 	
 	if len(f.Smoke_Loop) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET smoke_loop = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET smoke_loop = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -493,7 +493,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	}
 
 	if len(f.Steam_Pressure) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET steam_pressure = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET steam_pressure = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -505,7 +505,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 		}
 	}
 	if len(f.Fan_Freq) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET fan_freq = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET fan_freq = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -517,7 +517,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 		}
 	}
 	if len(f.Freq_Feedback) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET freq_feedback = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET freq_feedback = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -530,7 +530,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	}
 
 	if len(f.Throttle_Open) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET throttle_open = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET throttle_open = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -543,7 +543,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	}
 
 	if len(f.Throttle_Feedback) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET throttle_feedback = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET throttle_feedback = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -556,7 +556,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	}
 	
 	if len(f.Big_Fire) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET big_fire = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET big_fire = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -569,7 +569,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	}
 
 	if len(f.Small_Fire) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET small_fire = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET small_fire = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -582,7 +582,7 @@ func (r *DeviceBoilerAInfo) UpdateById(id int64, f *DeviceBoilerAInfoPutForm) (c
 	}
 
 	if len(f.Water_Pum) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET water_pum = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET water_pum = ? WHERE id = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -604,7 +604,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 
 
 	if len(f.Start) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET start = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET start = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -616,7 +616,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 		}
 	}
 	if len(f.Turn_Fire) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET turn_fire = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET turn_fire = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -628,7 +628,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 		}
 	}
 	if len(f.Stop) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET stop = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET stop = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -641,7 +641,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 	}
 
 	if len(f.Gas_Open) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET gas_open = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET gas_open = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -654,7 +654,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 	}
 
 	if len(f.Gas_Feedback) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET gas_feedback = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET gas_feedback = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -668,7 +668,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 
 	
 	if len(f.Smoke_Loop) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET smoke_loop = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET smoke_loop = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -681,7 +681,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 	}
 
 	if len(f.Steam_Pressure) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET steam_pressure = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET steam_pressure = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -693,7 +693,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 		}
 	}
 	if len(f.Fan_Freq) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET fan_freq = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET fan_freq = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -705,7 +705,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 		}
 	}
 	if len(f.Freq_Feedback) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET freq_feedback = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET freq_feedback = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -718,7 +718,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 	}
 
 	if len(f.Throttle_Open) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET throttle_open = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET throttle_open = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -731,7 +731,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 	}
 
 	if len(f.Throttle_Feedback) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET throttle_feedback = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET throttle_feedback = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -744,7 +744,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 	}
 	
 	if len(f.Big_Fire) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET big_fire = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET big_fire = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -757,7 +757,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 	}
 
 	if len(f.Small_Fire) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET small_fire = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET small_fire = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -770,7 +770,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 	}
 
 	if len(f.Water_Pum) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerAinfo SET water_pum = ? WHERE device_sn = ?")
+		st, err1 := db.Prepare("UPDATE dev_boiler_a_info SET water_pum = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
@@ -789,7 +789,7 @@ func (r *DeviceBoilerAInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerAI
 func (r *DeviceBoilerAInfo) DeleteById(id int64) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("DELETE FROM dev_DeviceBoilerAinfo WHERE id = ?")
+	st, err := db.Prepare("DELETE FROM dev_boiler_a_info WHERE id = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -812,7 +812,7 @@ func (r *DeviceBoilerAInfo) DeleteById(id int64) (code int, err error) {
 func (r *DeviceBoilerAInfo) DeleteByDeviceSN(device_sn string) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("DELETE FROM dev_DeviceBoilerAinfo WHERE device_sn = ?")
+	st, err := db.Prepare("DELETE FROM dev_boiler_a_info WHERE device_sn = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
