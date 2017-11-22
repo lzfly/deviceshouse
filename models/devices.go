@@ -19,17 +19,6 @@ type Device struct {
 	Is_online    int32    `json:"is_online"`
 	Activetime  time.Time `json:"activetime"`
 }
-type Device2 struct {
-	Id           int64    `json:"id,omitempty"`
-	Device_sn    string   `json:"device_sn"`
-	Type_code    int32    `json:"type_code"`
-	Type_name    string   `json:"type_name"`
-	Device_model string   `json:"device_model"`
-	Device_name  string   `json:"device_name"`
-	Is_online    int32    `json:"is_online"`
-	Activetime  time.Time `json:"activetime"`
-	DeviceAttrInfoInfo []DeviceAttrInfo `json:"deviceattrinfos"`
-}
 
 
 func NewDevice(f *DevicePostForm, t time.Time) *Device {
@@ -187,13 +176,10 @@ func (r *Device) ClearPass() {
 	
 }
 
-func (r *Device2) ClearPass() {
-	
-}
 
 func GetAllDevices(queryVal map[string]string, queryOp map[string]string,
 	order map[string]string, limit int64,
-	offset int64) (records []Device2, err error) {
+	offset int64) (records []Device, err error) {
 	sqlStr := "SELECT id, device_sn, type_code, type_name, dev_model, dev_name, is_online, activetime FROM dev_device"
 	if len(queryVal) > 0 {
 		sqlStr += " WHERE "
@@ -248,7 +234,7 @@ func GetAllDevices(queryVal map[string]string, queryOp map[string]string,
 	}
 	defer rows.Close()
 
-	records = make([]Device2, 0, limit)
+	records = make([]Device, 0, limit)
 	for rows.Next() {
 		var tmpId    sql.NullInt64 
 		var tmpDevice_sn    sql.NullString   
@@ -264,7 +250,7 @@ func GetAllDevices(queryVal map[string]string, queryOp map[string]string,
 			return nil, err
 		}
 
-		r := Device2{}
+		r := Device{}
 		if tmpId.Valid {
 			r.Id = tmpId.Int64
 		}
@@ -286,20 +272,6 @@ func GetAllDevices(queryVal map[string]string, queryOp map[string]string,
 		if tmpActivetime.Valid {
 			r.Activetime = tmpActivetime.Time
 		}
-		
-
-	   var queryVal map[string]string = make(map[string]string)
-	   var queryOp map[string]string = make(map[string]string)
-	   var queryOd map[string]string = make(map[string]string)
-	   queryVal["device_sn"] = r.Device_sn
-	   queryOp["device_sn"] = "="
-		r.DeviceAttrInfoInfo, err = GetAllDeviceAttrInfos(queryVal, queryOp, queryOd,
-		20, 0)
-		
-	    if err != nil {
-		    beego.Error("GetAllDeviceAttrInfo:", err)
-	    }
-
 		
 		records = append(records, r)
 	}
