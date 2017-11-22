@@ -98,7 +98,7 @@ func (r *DeviceBoilerBInfo) FindById(id int64) (code int, err error) {
 
 
 
-	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpSmoke_Temp,  &tmpLoad, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &Run_State); err != nil {
+	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpSmoke_Temp,  &tmpLoad, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &tmpRun_State); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
 		} else {
@@ -173,10 +173,10 @@ func (r *DeviceBoilerBInfo) FindByDeviceSN(device_sn string) (code int, err erro
     var tmpThrottle       sql.NullString  
     var tmpSmoke          sql.NullString 
 	var tmpFreq           sql.NullString
-	var Run_State         sql.NullString
+	var tmpRun_State      sql.NullString
 
 
-	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpSmoke_Temp,  &tmpLoad, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &Run_State); err != nil {
+	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpSmoke_Temp,  &tmpLoad, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &tmpRun_State); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
 		} else {
@@ -303,9 +303,9 @@ func GetAllDeviceBoilerBInfos(queryVal map[string]string, queryOp map[string]str
 		var tmpThrottle       sql.NullString  
 		var tmpSmoke          sql.NullString 
 		var tmpFreq           sql.NullString
-		var Run_State         sql.NullString
+		var tmpRun_State         sql.NullString
 		
-		if err := rows.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpSmoke_Temp,  &tmpLoad, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &Run_State); err != nil {
+		if err := rows.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpSmoke_Temp,  &tmpLoad, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &tmpRun_State); err != nil {
 			return nil, err
 		}
 
