@@ -15,7 +15,6 @@ type Device struct {
 	Type_code    int32    `json:"type_code"`
 	Type_name    string   `json:"type_name"`
 	Device_model string   `json:"device_model"`
-	Device_ver   string   `json:"device_ver"`
 	Device_name     string   `json:"device_name"`
 	Is_online    int32    `json:"is_online"`
 	Activetime  time.Time `json:"activetime"`
@@ -26,7 +25,6 @@ type Device2 struct {
 	Type_code    int32    `json:"type_code"`
 	Type_name    string   `json:"type_name"`
 	Device_model string   `json:"device_model"`
-	Device_ver   string   `json:"device_ver"`
 	Device_name  string   `json:"device_name"`
 	Is_online    int32    `json:"is_online"`
 	Activetime  time.Time `json:"activetime"`
@@ -40,7 +38,6 @@ func NewDevice(f *DevicePostForm, t time.Time) *Device {
 		Type_code:      f.Type_code,
 		Type_name:      f.Type_name,
 		Device_model:   f.Device_model,
-		Device_ver:     f.Device_ver,
 		Device_name:    f.Device_name,
 		Activetime:  t}
 
@@ -50,14 +47,14 @@ func NewDevice(f *DevicePostForm, t time.Time) *Device {
 func (r *Device) Insert() (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("INSERT INTO dev_device(device_sn, type_code, type_name, dev_model, dev_ver, dev_name, is_online, activetime) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	st, err := db.Prepare("INSERT INTO dev_device(device_sn, type_code, type_name, dev_model, dev_name, is_online, activetime) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return ErrDatabase, err
 	}
 	defer st.Close()
 
 	//if result, err := st.Exec(
-	if _, err := st.Exec(r.Device_sn, r.Type_code, r.Type_name, r.Device_model, r.Device_ver, r.Device_name, r.Is_online, r.Activetime); err != nil {
+	if _, err := st.Exec(r.Device_sn, r.Type_code, r.Type_name, r.Device_model, r.Device_name, r.Is_online, r.Activetime); err != nil {
 		if e, ok := err.(*mysql.MySQLError); ok {
 			//Duplicate key
 			if e.Number == 1062 {
@@ -78,7 +75,7 @@ func (r *Device) Insert() (code int, err error) {
 func (r *Device) FindById(id int64) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, device_sn, type_code, type_name, dev_model, dev_ver, dev_name, is_online, activetime FROM dev_device WHERE id = ?")
+	st, err := db.Prepare("SELECT id, device_sn, type_code, type_name, dev_model, dev_name, is_online, activetime FROM dev_device WHERE id = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -90,14 +87,13 @@ func (r *Device) FindById(id int64) (code int, err error) {
 	var tmpDevice_sn    sql.NullString   
 	var tmpType_code    int32
     var tmpType_name    sql.NullString      
-    var tmpDevice_model sql.NullString   
-	var tmpDevice_ver   sql.NullString   
+    var tmpDevice_model sql.NullString     
 	var tmpDevice_name  sql.NullString    
 	var tmpIs_online    int32    
 	var tmpActivetime   mysql.NullTime 
 	
 
-	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpType_code, &tmpType_name, &tmpDevice_model, &tmpDevice_ver, &tmpDevice_name, &tmpIs_online, 
+	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpType_code, &tmpType_name, &tmpDevice_model, &tmpDevice_name, &tmpIs_online, 
 		&tmpActivetime); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
@@ -119,9 +115,7 @@ func (r *Device) FindById(id int64) (code int, err error) {
 	if tmpDevice_model.Valid {
 		r.Device_model = tmpDevice_model.String
 	}
-	if tmpDevice_ver.Valid {
-		r.Device_ver = tmpDevice_ver.String
-	}
+
 	if tmpDevice_name.Valid {
 		r.Device_name = tmpDevice_name.String
 	}
@@ -136,7 +130,7 @@ func (r *Device) FindById(id int64) (code int, err error) {
 func (r *Device) FindByDeviceSN(device_sn string) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, device_sn, type_code, type_name, dev_model, dev_ver, dev_name, is_online, activetime FROM dev_device WHERE device_sn = ?")
+	st, err := db.Prepare("SELECT id, device_sn, type_code, type_name, dev_model, dev_name, is_online, activetime FROM dev_device WHERE device_sn = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -148,15 +142,14 @@ func (r *Device) FindByDeviceSN(device_sn string) (code int, err error) {
 	var tmpDevice_sn    sql.NullString   
 	var tmpType_code    int32
     var tmpType_name    sql.NullString      
-    var tmpDevice_model sql.NullString   
-	var tmpDevice_ver   sql.NullString    
+    var tmpDevice_model sql.NullString     
 	var tmpDevice_name  sql.NullString    
 	var tmpIs_online    int32    
 	var tmpActivetime   mysql.NullTime 
 	
 	
 
-	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpType_code, &tmpType_name, &tmpDevice_model, &tmpDevice_ver, &tmpDevice_name, &tmpIs_online, 
+	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpType_code, &tmpType_name, &tmpDevice_model, &tmpDevice_name, &tmpIs_online, 
 		&tmpActivetime); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
@@ -178,9 +171,7 @@ func (r *Device) FindByDeviceSN(device_sn string) (code int, err error) {
 	if tmpDevice_model.Valid {
 		r.Device_model = tmpDevice_model.String
 	}
-	if tmpDevice_ver.Valid {
-		r.Device_ver = tmpDevice_ver.String
-	}
+
 	if tmpDevice_name.Valid {
 		r.Device_name = tmpDevice_name.String
 	}
@@ -203,7 +194,7 @@ func (r *Device2) ClearPass() {
 func GetAllDevices(queryVal map[string]string, queryOp map[string]string,
 	order map[string]string, limit int64,
 	offset int64) (records []Device2, err error) {
-	sqlStr := "SELECT id, device_sn, type_code, type_name, dev_model, dev_ver, dev_name, is_online, activetime FROM dev_device"
+	sqlStr := "SELECT id, device_sn, type_code, type_name, dev_model, dev_name, is_online, activetime FROM dev_device"
 	if len(queryVal) > 0 {
 		sqlStr += " WHERE "
 		first := true
@@ -263,13 +254,12 @@ func GetAllDevices(queryVal map[string]string, queryOp map[string]string,
 		var tmpDevice_sn    sql.NullString   
 		var tmpType_code    int32   
 		var tmpType_name    sql.NullString 
-		var tmpDevice_model sql.NullString   
-		var tmpDevice_ver   sql.NullString   
+		var tmpDevice_model sql.NullString    
 		var tmpDevice_name         sql.NullString    
 		var tmpIs_online    int32    
 		var tmpActivetime   mysql.NullTime 
 		
-		if err := rows.Scan(&tmpId, &tmpDevice_sn, &tmpType_code, &tmpType_name, &tmpDevice_model, &tmpDevice_ver, &tmpDevice_name, &tmpIs_online, 
+		if err := rows.Scan(&tmpId, &tmpDevice_sn, &tmpType_code, &tmpType_name, &tmpDevice_model, &tmpDevice_name, &tmpIs_online, 
 			&tmpActivetime); err != nil {
 			return nil, err
 		}
@@ -288,9 +278,7 @@ func GetAllDevices(queryVal map[string]string, queryOp map[string]string,
 		if tmpDevice_model.Valid {
 			r.Device_model = tmpDevice_model.String
 		}
-		if tmpDevice_ver.Valid {
-			r.Device_ver = tmpDevice_ver.String
-		}
+
 		if tmpDevice_name.Valid {
 			r.Device_name = tmpDevice_name.String
 		}
@@ -364,18 +352,6 @@ func (r *Device) UpdateById(id int64, f *DevicePutForm) (code int, err error) {
 		}
 	}
 	
-	if len(f.Device_ver) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_device SET dev_ver = ? WHERE id = ?")
-		if err1 != nil {
-			return ErrDatabase, err1
-		}
-		defer st.Close()
-
-		_, err2 := st.Exec(f.Device_ver, id)
-		if err2 != nil {
-			return ErrDatabase, err2
-		}
-	}
 	
 	
 	if len(f.Device_name) > 0 {
@@ -434,18 +410,6 @@ func (r *Device) UpdateByDeviceSN(device_sn string, f *DevicePutForm) (code int,
 		}
 	}
 	
-	if len(f.Device_ver) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_device SET dev_ver = ? WHERE device_sn = ?")
-		if err1 != nil {
-			return ErrDatabase, err1
-		}
-		defer st.Close()
-
-		_, err2 := st.Exec(f.Device_ver, device_sn)
-		if err2 != nil {
-			return ErrDatabase, err2
-		}
-	}
 	
 	
 	if len(f.Device_name) > 0 {
