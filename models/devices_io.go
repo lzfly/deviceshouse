@@ -23,7 +23,7 @@ type DeviceGetOneInfo struct {
 type DeviceGetAllInfo struct {
     Status   int    `json:"status"`
 	Code     int    `json:"code"`
-	DevicesInfo []Device2 `json:"devices"`
+	DevicesInfo []Device `json:"devices"`
 }
 
 type DevicePutForm struct {
