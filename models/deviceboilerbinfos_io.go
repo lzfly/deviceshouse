@@ -45,7 +45,7 @@ type DeviceBoilerBInfoPutForm struct {
 	Throttle             string  `json:"throttle"`
 	Smoke                string  `json:"smoke"`
 	Freq                 string  `json:"freq"`
-	Run_State            string  `json:"run_state"``
+	Run_State            string  `json:"run_state"`
 }
 
 type DeviceBoilerBInfoPutInfo struct {
