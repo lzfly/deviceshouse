@@ -15,7 +15,7 @@ type DeviceBoilerAInfoPostForm struct {
 	Throttle_Feedback    string  `json:"throttle_feedback"`
 	Big_Fire             string  `json:"big_fire"`
 	Small_Fire           string  `json:"small_fire"`
-	Water_Pum            string  `json:"water_pum"`
+	Water_Pump            string  `json:"water_pump"`
 }
 
 type DeviceBoilerAInfoPostInfo struct {
@@ -51,7 +51,7 @@ type DeviceBoilerAInfoPutForm struct {
 	Throttle_Feedback    string  `json:"throttle_feedback"`
 	Big_Fire             string  `json:"big_fire"`
 	Small_Fire           string  `json:"small_fire"`
-	Water_Pum            string  `json:"water_pum"`
+	Water_Pump            string  `json:"water_pump"`
 }
 
 type DeviceBoilerAInfoPutInfo struct {
