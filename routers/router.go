@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"robotserver/controllers"
+	"boilerserver/controllers"
 	"github.com/astaxie/beego"
 )
 

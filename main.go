@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	_ "robotserver/routers"
+	_ "boilerserver/routers"
 
 	"github.com/astaxie/beego"
 	_ "github.com/astaxie/beego/session/redis"
