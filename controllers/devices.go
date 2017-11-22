@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"robotserver/models"
+	"boilerserver/models"
 	"encoding/json"
 	"github.com/astaxie/beego"
 	"time"

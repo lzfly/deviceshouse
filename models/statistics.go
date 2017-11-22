@@ -1,7 +1,7 @@
 package models
 
 import (
-	"robotserver/models/myredis"
+	"boilerserver/models/myredis"
 	"fmt"
 	"github.com/astaxie/beego"
 	"time"

@@ -1,7 +1,7 @@
 package models
 
 import (
-	"robotserver/models/mymysql"
+	"boilerserver/models/mymysql"
 	"database/sql"
 	"fmt"
 	"github.com/astaxie/beego"
