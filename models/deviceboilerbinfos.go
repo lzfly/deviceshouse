@@ -524,78 +524,64 @@ func (r *DeviceBoilerBInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerBI
 	db := mymysql.Conn()
 
 
-
-	if len(f.Device_sn) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET device_sn = ? WHERE id = ?")
-		if err1 != nil {
-			return ErrDatabase, err1
-		}
-		defer st.Close()
-
-		_, err2 := st.Exec(f.Device_sn, id)
-		if err2 != nil {
-			return ErrDatabase, err2
-		}
-	}
-
 	if len(f.Start_Temp) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET start_temp = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET start_temp = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Start_Temp, id)
+		_, err2 := st.Exec(f.Start_Temp, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
 	}
 	if len(f.Target_Temp) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET target_temp = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET target_temp = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Target_Temp, id)
+		_, err2 := st.Exec(f.Target_Temp, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
 	}
 	if len(f.Stop_Temp) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET stop_temp = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET stop_temp = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Stop_Temp, id)
+		_, err2 := st.Exec(f.Stop_Temp, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
 	}
 
 	if len(f.Out_Water_Temp) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET out_water_temp = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET out_water_temp = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Out_Water_Temp, id)
+		_, err2 := st.Exec(f.Out_Water_Temp, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
 	}
 
 	if len(f.Smoke_Temp) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET smoke_temp = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET smoke_temp = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Smoke_Temp, id)
+		_, err2 := st.Exec(f.Smoke_Temp, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
@@ -603,76 +589,76 @@ func (r *DeviceBoilerBInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerBI
 
 	
 	if len(f.Load) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET load = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET load = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Load, id)
+		_, err2 := st.Exec(f.Load, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
 	}
 
 	if len(f.Gas) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET gas = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET gas = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Gas, id)
+		_, err2 := st.Exec(f.Gas, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
 	}
 	if len(f.Throttle) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET throttle = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET throttle = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Throttle, id)
+		_, err2 := st.Exec(f.Throttle, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
 	}
 	if len(f.Smoke) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET smoke = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET smoke = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Smoke, id)
+		_, err2 := st.Exec(f.Smoke, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
 	}
 
 	if len(f.Freq) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET freq = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET freq = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Freq, id)
+		_, err2 := st.Exec(f.Freq, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
 	}
 
 	if len(f.Run_State) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET run_state = ? WHERE id = ?")
+		st, err1 := db.Prepare("UPDATE dev_DeviceBoilerBinfo SET run_state = ? WHERE device_sn = ?")
 		if err1 != nil {
 			return ErrDatabase, err1
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Run_State, id)
+		_, err2 := st.Exec(f.Run_State, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
