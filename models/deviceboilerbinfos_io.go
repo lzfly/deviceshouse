@@ -6,6 +6,7 @@ type DeviceBoilerBInfoPostForm struct {
 	Target_Temp          string  `json:"target_temp"`
 	Stop_Temp            string  `json:"stop_temp"`
 	Out_Water_Temp       string  `json:"out_water_temp"`
+	Back_Water_Temp      string  `json:"back_water_temp"`
     Smoke_Temp           string  `json:"smoke_temp"`
 	Boiler_Load          string  `json:"boiler_load"`
 	Gas                  string  `json:"gas"`
@@ -39,6 +40,7 @@ type DeviceBoilerBInfoPutForm struct {
 	Target_Temp          string  `json:"target_temp"`
 	Stop_Temp            string  `json:"stop_temp"`
 	Out_Water_Temp       string  `json:"out_water_temp"`
+	Back_Water_Temp      string  `json:"back_water_temp"`
     Smoke_Temp           string  `json:"smoke_temp"`
 	Boiler_Load          string  `json:"boiler_load"`
 	Gas                  string  `json:"gas"`

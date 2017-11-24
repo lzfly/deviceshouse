@@ -16,6 +16,7 @@ type DeviceBoilerBInfo struct {
 	Target_Temp          string  `json:"target_temp"`
 	Stop_Temp            string  `json:"stop_temp"`
 	Out_Water_Temp       string  `json:"out_water_temp"`
+	Back_Water_Temp      string  `json:"back_water_temp"`
     Smoke_Temp           string  `json:"smoke_temp"`
 	Boiler_Load          string  `json:"boiler_load"`
 	Gas                  string  `json:"gas"`
@@ -32,6 +33,7 @@ func NewDeviceBoilerBInfo(f *DeviceBoilerBInfoPostForm, t time.Time) *DeviceBoil
 		Target_Temp:     f.Target_Temp,
 		Stop_Temp:     f.Stop_Temp,
 		Out_Water_Temp:    f.Out_Water_Temp,
+		Back_Water_Temp:    f.Back_Water_Temp,
 		Smoke_Temp:    f.Smoke_Temp,
 		Boiler_Load:     f.Boiler_Load,
 		Gas:     f.Gas,
@@ -46,14 +48,14 @@ func NewDeviceBoilerBInfo(f *DeviceBoilerBInfoPostForm, t time.Time) *DeviceBoil
 func (r *DeviceBoilerBInfo) Insert() (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("INSERT INTO dev_boiler_b_info(device_sn, start_temp, target_temp, stop_temp, out_water_temp, smoke_temp, boiler_load, gas, throttle, smoke, freq, run_state) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	st, err := db.Prepare("INSERT INTO dev_boiler_b_info(device_sn, start_temp, target_temp, stop_temp, out_water_temp, back_water_temp, smoke_temp, boiler_load, gas, throttle, smoke, freq, run_state) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return ErrDatabase, err
 	}
 	defer st.Close()
 
 	//if result, err := st.Exec(
-	if _, err := st.Exec(r.Device_sn, r.Start_Temp, r.Target_Temp, r.Stop_Temp, r.Out_Water_Temp, r.Smoke_Temp, r.Boiler_Load, r.Gas, r.Throttle, r.Smoke, r.Freq, r.Run_State); err != nil {
+	if _, err := st.Exec(r.Device_sn, r.Start_Temp, r.Target_Temp, r.Stop_Temp, r.Out_Water_Temp, r.Back_Water_Temp, r.Smoke_Temp, r.Boiler_Load, r.Gas, r.Throttle, r.Smoke, r.Freq, r.Run_State); err != nil {
 		if e, ok := err.(*mysql.MySQLError); ok {
 			//Duplicate key
 			if e.Number == 1062 {
@@ -74,7 +76,7 @@ func (r *DeviceBoilerBInfo) Insert() (code int, err error) {
 func (r *DeviceBoilerBInfo) FindById(id int64) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, device_sn, start_temp, target_temp, stop_temp, out_water_temp, smoke_temp, boiler_load, gas, throttle, smoke, freq, run_state FROM dev_boiler_b_info WHERE id = ?")
+	st, err := db.Prepare("SELECT id, device_sn, start_temp, target_temp, stop_temp, out_water_temp, back_water_temp, smoke_temp, boiler_load, gas, throttle, smoke, freq, run_state FROM dev_boiler_b_info WHERE id = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -88,6 +90,7 @@ func (r *DeviceBoilerBInfo) FindById(id int64) (code int, err error) {
 	var tmpTarget_Temp    sql.NullString
     var tmpStop_Temp      sql.NullString  
     var tmpOut_Water_Temp sql.NullString 
+	var tmpBack_Water_Temp sql.NullString 
 	var tmpSmoke_Temp     sql.NullString 
 	var tmpBoiler_Load    sql.NullString
 	var tmpGas            sql.NullString
@@ -98,7 +101,7 @@ func (r *DeviceBoilerBInfo) FindById(id int64) (code int, err error) {
 
 
 
-	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpSmoke_Temp,  &tmpBoiler_Load, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &tmpRun_State); err != nil {
+	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpBack_Water_Temp, &tmpSmoke_Temp,  &tmpBoiler_Load, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &tmpRun_State); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
 		} else {
@@ -123,6 +126,9 @@ func (r *DeviceBoilerBInfo) FindById(id int64) (code int, err error) {
 		}
 		if tmpOut_Water_Temp.Valid {
 			r.Out_Water_Temp = tmpOut_Water_Temp.String
+		}
+		if tmpBack_Water_Temp.Valid {
+			r.Back_Water_Temp = tmpBack_Water_Temp.String
 		}
 		if tmpSmoke_Temp.Valid {
 			r.Smoke_Temp = tmpSmoke_Temp.String
@@ -153,7 +159,7 @@ func (r *DeviceBoilerBInfo) FindById(id int64) (code int, err error) {
 func (r *DeviceBoilerBInfo) FindByDeviceSN(device_sn string) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, device_sn, start_temp, target_temp, stop_temp, out_water_temp, smoke_temp, boiler_load, gas, throttle, smoke, freq, run_state FROM dev_boiler_b_info WHERE device_sn = ?")
+	st, err := db.Prepare("SELECT id, device_sn, start_temp, target_temp, stop_temp, out_water_temp, back_water_temp, smoke_temp, boiler_load, gas, throttle, smoke, freq, run_state FROM dev_boiler_b_info WHERE device_sn = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -167,6 +173,7 @@ func (r *DeviceBoilerBInfo) FindByDeviceSN(device_sn string) (code int, err erro
 	var tmpTarget_Temp    sql.NullString
     var tmpStop_Temp      sql.NullString  
     var tmpOut_Water_Temp sql.NullString 
+	var tmpBack_Water_Temp sql.NullString 
 	var tmpSmoke_Temp     sql.NullString 
 	var tmpBoiler_Load    sql.NullString
 	var tmpGas            sql.NullString
@@ -176,7 +183,7 @@ func (r *DeviceBoilerBInfo) FindByDeviceSN(device_sn string) (code int, err erro
 	var tmpRun_State      sql.NullString
 
 
-	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpSmoke_Temp,  &tmpBoiler_Load, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &tmpRun_State); err != nil {
+	if err := row.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpBack_Water_Temp, &tmpSmoke_Temp,  &tmpBoiler_Load, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &tmpRun_State); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
 		} else {
@@ -201,6 +208,9 @@ func (r *DeviceBoilerBInfo) FindByDeviceSN(device_sn string) (code int, err erro
 		}
 		if tmpOut_Water_Temp.Valid {
 			r.Out_Water_Temp = tmpOut_Water_Temp.String
+		}
+		if tmpBack_Water_Temp.Valid {
+			r.Back_Water_Temp = tmpBack_Water_Temp.String
 		}
 		if tmpSmoke_Temp.Valid {
 			r.Smoke_Temp = tmpSmoke_Temp.String
@@ -234,7 +244,7 @@ func (r *DeviceBoilerBInfo) ClearPass() {
 func GetAllDeviceBoilerBInfos(queryVal map[string]string, queryOp map[string]string,
 	order map[string]string, limit int64,
 	offset int64) (records []DeviceBoilerBInfo, err error) {
-	sqlStr := "SELECT id, device_sn, start_temp, target_temp, stop_temp, out_water_temp, smoke_temp, boiler_load, gas, throttle, smoke, freq, run_state FROM dev_boiler_b_info"
+	sqlStr := "SELECT id, device_sn, start_temp, target_temp, stop_temp, out_water_temp, back_water_temp, smoke_temp, boiler_load, gas, throttle, smoke, freq, run_state FROM dev_boiler_b_info"
 	if len(queryVal) > 0 {
 		sqlStr += " WHERE "
 		first := true
@@ -297,6 +307,7 @@ func GetAllDeviceBoilerBInfos(queryVal map[string]string, queryOp map[string]str
 		var tmpTarget_Temp    sql.NullString
 		var tmpStop_Temp      sql.NullString  
 		var tmpOut_Water_Temp sql.NullString 
+		var tmpBack_Water_Temp sql.NullString 
 		var tmpSmoke_Temp     sql.NullString 
 		var tmpBoiler_Load    sql.NullString
 		var tmpGas            sql.NullString
@@ -305,7 +316,7 @@ func GetAllDeviceBoilerBInfos(queryVal map[string]string, queryOp map[string]str
 		var tmpFreq           sql.NullString
 		var tmpRun_State      sql.NullString
 		
-		if err := rows.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpSmoke_Temp,  &tmpBoiler_Load, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &tmpRun_State); err != nil {
+		if err := rows.Scan(&tmpId, &tmpDevice_sn, &tmpStart_Temp, &tmpTarget_Temp, &tmpStop_Temp, &tmpOut_Water_Temp, &tmpBack_Water_Temp, &tmpSmoke_Temp,  &tmpBoiler_Load, &tmpGas, &tmpThrottle, &tmpSmoke, &tmpFreq, &tmpRun_State); err != nil {
 			return nil, err
 		}
 
@@ -327,6 +338,9 @@ func GetAllDeviceBoilerBInfos(queryVal map[string]string, queryOp map[string]str
 		}
 		if tmpOut_Water_Temp.Valid {
 			r.Out_Water_Temp = tmpOut_Water_Temp.String
+		}
+		if tmpBack_Water_Temp.Valid {
+			r.Back_Water_Temp = tmpBack_Water_Temp.String
 		}
 		if tmpSmoke_Temp.Valid {
 			r.Smoke_Temp = tmpSmoke_Temp.String
@@ -425,6 +439,19 @@ func (r *DeviceBoilerBInfo) UpdateById(id int64, f *DeviceBoilerBInfoPutForm) (c
 		}
 	}
 
+	if len(f.Back_Water_Temp) > 0 {
+		st, err1 := db.Prepare("UPDATE dev_boiler_b_info SET back_water_temp = ? WHERE id = ?")
+		if err1 != nil {
+			return ErrDatabase, err1
+		}
+		defer st.Close()
+
+		_, err2 := st.Exec(f.Back_Water_Temp, id)
+		if err2 != nil {
+			return ErrDatabase, err2
+		}
+	}
+	
 	if len(f.Smoke_Temp) > 0 {
 		st, err1 := db.Prepare("UPDATE dev_boiler_b_info SET smoke_temp = ? WHERE id = ?")
 		if err1 != nil {
@@ -574,6 +601,19 @@ func (r *DeviceBoilerBInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerBI
 		}
 	}
 
+	if len(f.Back_Water_Temp) > 0 {
+		st, err1 := db.Prepare("UPDATE dev_boiler_b_info SET back_water_temp = ? WHERE device_sn = ?")
+		if err1 != nil {
+			return ErrDatabase, err1
+		}
+		defer st.Close()
+
+		_, err2 := st.Exec(f.Back_Water_Temp, id)
+		if err2 != nil {
+			return ErrDatabase, err2
+		}
+	}
+	
 	if len(f.Smoke_Temp) > 0 {
 		st, err1 := db.Prepare("UPDATE dev_boiler_b_info SET smoke_temp = ? WHERE device_sn = ?")
 		if err1 != nil {
