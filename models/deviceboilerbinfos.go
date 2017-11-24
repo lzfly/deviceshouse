@@ -608,7 +608,7 @@ func (r *DeviceBoilerBInfo) UpdateByDeviceSN(device_sn string, f *DeviceBoilerBI
 		}
 		defer st.Close()
 
-		_, err2 := st.Exec(f.Back_Water_Temp, id)
+		_, err2 := st.Exec(f.Back_Water_Temp, device_sn)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}
