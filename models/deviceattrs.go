@@ -13,15 +13,13 @@ type DeviceAttr struct {
 	Id            int64     `json:"id"`
 	Attr_name     string    `json:"attr_name"`
 	Attr_code     int32     `json:"attr_code"`
-	Datatype      string    `json:"datatype"`
 
 }
 
 func NewDeviceAttr(f *DeviceAttrPostForm, t time.Time) *DeviceAttr {
 	deviceattr := DeviceAttr{
 		Attr_name:       f.Attr_name,
-		Attr_code:      f.Attr_code,
-		Datatype:       f.Datatype}
+		Attr_code:      f.Attr_code}
 
 	return &deviceattr
 }
@@ -29,14 +27,14 @@ func NewDeviceAttr(f *DeviceAttrPostForm, t time.Time) *DeviceAttr {
 func (r *DeviceAttr) Insert() (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("INSERT INTO dev_deviceattr(attr_name, attr_code, datatype) VALUES(?, ?, ?)")
+	st, err := db.Prepare("INSERT INTO dev_deviceattr(attr_name, attr_code) VALUES(?, ?)")
 	if err != nil {
 		return ErrDatabase, err
 	}
 	defer st.Close()
 
 	//if result, err := st.Exec(
-	if _, err := st.Exec(r.Attr_name, r.Attr_code, r.Datatype); err != nil {
+	if _, err := st.Exec(r.Attr_name, r.Attr_code); err != nil {
 		if e, ok := err.(*mysql.MySQLError); ok {
 			//Duplicate key
 			if e.Number == 1062 {
@@ -57,7 +55,7 @@ func (r *DeviceAttr) Insert() (code int, err error) {
 func (r *DeviceAttr) FindById(id int64) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, attr_name,r attr_code, datatype FROM dev_deviceattr WHERE id = ?")
+	st, err := db.Prepare("SELECT id, attr_name,r attr_code FROM dev_deviceattr WHERE id = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -68,11 +66,9 @@ func (r *DeviceAttr) FindById(id int64) (code int, err error) {
 	var tmpId                 sql.NullInt64 
 	var tmpAttr_name          sql.NullString   
 	var tmpAttr_code          int32 	
-	var tmpDatatype           sql.NullString 
 
 
-	if err := row.Scan(&tmpId, &tmpAttr_name, &tmpAttr_code, 
-		&tmpDatatype); err != nil {
+	if err := row.Scan(&tmpId, &tmpAttr_name, &tmpAttr_code); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
 		} else {
@@ -88,17 +84,13 @@ func (r *DeviceAttr) FindById(id int64) (code int, err error) {
 	}
 	r.Attr_code = tmpAttr_code
 
-	if tmpDatatype.Valid {
-		r.Datatype = tmpDatatype.String
-	}
-
 	return 0, nil
 }
 
 func (r *DeviceAttr) FindByAttrCode(attrCode int32) (code int, err error) {
 	db := mymysql.Conn()
 
-	st, err := db.Prepare("SELECT id, attr_name, attr_code, datatype FROM dev_deviceattr WHERE attr_code = ?")
+	st, err := db.Prepare("SELECT id, attr_name, attr_code FROM dev_deviceattr WHERE attr_code = ?")
 	if err != nil {
 		return ErrDatabase, err
 	}
@@ -109,11 +101,9 @@ func (r *DeviceAttr) FindByAttrCode(attrCode int32) (code int, err error) {
 	var tmpId                 sql.NullInt64 
 	var tmpAttr_name          sql.NullString   
 	var tmpAttr_code          int32 	
-	var tmpDatatype           sql.NullString 
 
 
-	if err := row.Scan(&tmpId, &tmpAttr_name, &tmpAttr_code, 
-		&tmpDatatype); err != nil {
+	if err := row.Scan(&tmpId, &tmpAttr_name, &tmpAttr_code); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound, err
 		} else {
@@ -129,9 +119,6 @@ func (r *DeviceAttr) FindByAttrCode(attrCode int32) (code int, err error) {
 	}
 	r.Attr_code = tmpAttr_code
 
-	if tmpDatatype.Valid {
-		r.Datatype = tmpDatatype.String
-	}
 
 	return 0, nil
 }
@@ -143,7 +130,7 @@ func (r *DeviceAttr) ClearPass() {
 func GetAllDeviceAttrs(queryVal map[string]string, queryOp map[string]string,
 	order map[string]string, limit int64,
 	offset int64) (records []DeviceAttr, err error) {
-	sqlStr := "SELECT id, attr_name, attr_code, datatype FROM dev_deviceattr"
+	sqlStr := "SELECT id, attr_name, attr_code FROM dev_deviceattr"
 	if len(queryVal) > 0 {
 		sqlStr += " WHERE "
 		first := true
@@ -202,7 +189,6 @@ func GetAllDeviceAttrs(queryVal map[string]string, queryOp map[string]string,
 		var tmpId            sql.NullInt64 
 		var tmpAttr_name          sql.NullString   
 		var tmpAttr_code     int32 	
-		var tmpDatatype          sql.NullString 
 		
 		if err := rows.Scan(&tmpId, &tmpAttr_name, &tmpAttr_code,
 		&tmpDatatype); err != nil {
@@ -218,11 +204,6 @@ func GetAllDeviceAttrs(queryVal map[string]string, queryOp map[string]string,
 		}
 		r.Attr_code = tmpAttr_code
 
-		if tmpDatatype.Valid {
-			r.Datatype = tmpDatatype.String
-		}
-
-	
 		records = append(records, r)
 	}
 	if err := rows.Err(); err != nil {
@@ -255,19 +236,6 @@ func (r *DeviceAttr) UpdateById(id int64, f *DeviceAttrPutForm) (code int, err e
 		defer st.Close()
 
 		_, err2 := st.Exec(f.Attr_code, id)
-		if err2 != nil {
-			return ErrDatabase, err2
-		}
-	}
-
-	if len(f.Datatype) > 0 {
-		st, err1 := db.Prepare("UPDATE dev_deviceattr SET datatype = ? WHERE id = ?")
-		if err1 != nil {
-			return ErrDatabase, err1
-		}
-		defer st.Close()
-
-		_, err2 := st.Exec(f.Datatype, id)
 		if err2 != nil {
 			return ErrDatabase, err2
 		}

@@ -3,7 +3,6 @@ package models
 type DeviceAttrPostForm struct {
 	Attr_name             string `json:"attr_name"`
 	Attr_code        int32 `json:"attr_code"`
-	Datatype         string `json:"datatype"`
 }
 
 type DeviceAttrPostInfo struct {
@@ -27,7 +26,6 @@ type DeviceAttrGetAllInfo struct {
 type DeviceAttrPutForm struct {
 	Attr_name             string `json:"attr_name"`
 	Attr_code        int32 `json:"attr_code"`
-	Datatype         string `json:"datatype"`
 }
 
 type DeviceAttrPutInfo struct {
