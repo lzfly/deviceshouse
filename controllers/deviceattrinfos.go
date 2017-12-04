@@ -163,7 +163,6 @@ func (this *DeviceAttrInfoController) Put() {
 
 	form := models.DeviceAttrInfoPutForm{}
 	form.Attr_code = -1
-	form.Is_control = -1
 
 	err = json.Unmarshal(this.Ctx.Input.RequestBody, &form)
 	if err != nil {
