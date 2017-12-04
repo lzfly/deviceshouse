@@ -190,8 +190,7 @@ func GetAllDeviceAttrs(queryVal map[string]string, queryOp map[string]string,
 		var tmpAttr_name          sql.NullString   
 		var tmpAttr_code     int32 	
 		
-		if err := rows.Scan(&tmpId, &tmpAttr_name, &tmpAttr_code,
-		&tmpDatatype); err != nil {
+		if err := rows.Scan(&tmpId, &tmpAttr_name, &tmpAttr_code); err != nil {
 			return nil, err
 		}
 
