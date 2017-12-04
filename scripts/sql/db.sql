@@ -1,6 +1,6 @@
 /*
 SQLyog v10.2 
-MySQL - 5.7.20-log : Database - boiler
+MySQL - 5.6.35-log : Database - deviceshouse
 *********************************************************************
 */
 
@@ -12,9 +12,9 @@ MySQL - 5.7.20-log : Database - boiler
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`boiler` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`deviceshouse` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-USE `boiler`;
+USE `deviceshouse`;
 
 /*Table structure for table `dev_boiler_a_info` */
 
@@ -89,6 +89,38 @@ CREATE TABLE `dev_device` (
 
 insert  into `dev_device`(`id`,`device_sn`,`type_code`,`type_name`,`dev_name`,`is_online`,`activetime`) values (4,'boiler1',31,'boiler_a','boiler1',0,'2017-07-20 11:38:47'),(5,'boiler2',32,'bolier_b','boiler2',0,'2017-07-20 11:38:47');
 
+/*Table structure for table `dev_deviceattr` */
+
+DROP TABLE IF EXISTS `dev_deviceattr`;
+
+CREATE TABLE `dev_deviceattr` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `attr_name` varchar(64) DEFAULT NULL,
+  `attr_code` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+/*Data for the table `dev_deviceattr` */
+
+insert  into `dev_deviceattr`(`id`,`attr_name`,`attr_code`) values (2,'开关',1001),(3,'开度',1002),(4,'浓度',1003),(5,'总量',1004),(6,'亮度',1005),(7,'颜色',1006),(8,'色温',1007),(9,'温度',1008),(10,'湿度',1009),(11,'窗帘开关停',1010),(12,'报警',1011);
+
+/*Table structure for table `dev_deviceattrinfo` */
+
+DROP TABLE IF EXISTS `dev_deviceattrinfo`;
+
+CREATE TABLE `dev_deviceattrinfo` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `device_sn` varchar(64) DEFAULT NULL,
+  `attr_code` int(11) DEFAULT NULL,
+  `attr_name` varchar(64) DEFAULT NULL,
+  `attr_value_cur` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+/*Data for the table `dev_deviceattrinfo` */
+
+insert  into `dev_deviceattrinfo`(`id`,`device_sn`,`attr_code`,`attr_name`,`attr_value_cur`) values (1,'robot1',1001,'开关','0'),(2,'robot2',1001,'开关','0'),(3,'robot3',1001,'开关','0');
+
 /*Table structure for table `dev_devicetype` */
 
 DROP TABLE IF EXISTS `dev_devicetype`;
@@ -102,7 +134,7 @@ CREATE TABLE `dev_devicetype` (
 
 /*Data for the table `dev_devicetype` */
 
-insert  into `dev_devicetype`(`id`,`type_name`,`type_code`) values (32,'boiler_a',31),(33,'boiler_b',32);
+insert  into `dev_devicetype`(`id`,`type_name`,`type_code`) values (2,'窗帘',2),(3,'PM2.5',3),(4,'甲醛报警',4),(5,'燃气报警',5),(6,'烟雾报警',6),(7,'电表',7),(8,'水表',8),(9,'温湿度',9),(10,'亮度色温灯',15),(11,'开关',16),(12,'插座',17),(13,'门磁',18),(14,'人体红外',19),(15,'燃气表',20),(16,'热表',21),(22,'摄像头',10),(23,'机器人',22),(32,'boiler_a',31),(33,'boiler_b',32);
 
 /*Table structure for table `dev_user_bind_device` */
 
