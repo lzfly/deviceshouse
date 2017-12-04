@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"boilerserver/controllers"
+	"deviceshouse/controllers"
 	"github.com/astaxie/beego"
 )
 
